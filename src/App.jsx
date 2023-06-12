@@ -4,8 +4,17 @@ import './App.css'
 function App() {
   const [display, setDisplay] = useState('');
   const [calcuate, setCalculate]=useState([]);
+  const [num1, setNum1] = useState("")
+
+  const handleChange = (e) => {
+    //a destructured object to easily point out the "values"
+  const {name, value} = e.target;
+  //using parseInt to convert the value from string to number
+    if(name == "num1") setNum1(parseInt(value));
+  };
 
   const handleClick = ()=>{
+
     setDisplay();
   }
 
@@ -13,7 +22,9 @@ function App() {
     <>
       <h1>Calculator</h1>
       <div className='main'>
-        <div className='display'>{display}{/* Input Field */} </div>
+        <div className='display'>{display}
+        <input type='num' placeholder='Num1' value={num1} onChange={handleChange}></input>
+        {/* Input Field */} </div>
          
        <p className='keypad'>
           <button >AC</button>
