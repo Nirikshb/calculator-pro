@@ -1,23 +1,39 @@
 import React, { useState } from 'react';
 
 const Calculator = () => {
+  const [history, setHistory] = useState([]);
+  const [currentCalculation, setCurrentCalculation] = useState('');
   const [display, setDisplay] = useState('');
+  const [showHistory, setShowHistory] = useState(false);
 
   const handleButtonClick = (value) => {
     setDisplay(display.toString() + value);
+    setCurrentCalculation(currentCalculation.toString() + value);
   };
 
   const handleClearClick = () => {
     setDisplay('');
+    setCurrentCalculation('');
   };
 
   const handleEqualClick = () => {
     try {
       const result = eval(display);
+      const calculation = `${currentCalculation} = ${result}`;
+
       setDisplay(result.toString());
+      setCurrentCalculation('');
+      setHistory((prevHistory) => {
+        const newHistory = [calculation, ...prevHistory.slice(0, 4)];
+        return newHistory;
+      });
     } catch (error) {
       setDisplay('Error');
     }
+  };
+
+  const handleHistoryClick = () => {
+    setShowHistory(!showHistory);
   };
 
   return (
@@ -42,6 +58,18 @@ const Calculator = () => {
         <button onClick={handleEqualClick}>=</button>
         <button onClick={handleClearClick}>AC</button>
       </div>
+      <button onClick={handleHistoryClick}>
+        {showHistory ? 'Hide History' : 'Show History'}
+      </button>
+      {showHistory && (
+        <div className="history">
+          <ul>
+            {history.map((calculation, index) => (
+              <li key={index}>{calculation}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
