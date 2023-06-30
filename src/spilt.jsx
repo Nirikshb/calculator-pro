@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const SplitExpenseCalculator = () => {
+  
   const [totalAmount, setTotalAmount] = useState('');
   const [numberOfFriends, setNumberOfFriends] = useState('');
   const [result, setResult] = useState(null);
   const [expenses, setExpenses] = useState([]);
   const [splitExpenses, setSplitExpenses] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState('USD');
 
+
+
+// button functions
   const handleTotalAmountChange = (e) => {
     setTotalAmount(e.target.value);
   };
@@ -35,12 +40,16 @@ const SplitExpenseCalculator = () => {
 
   const calculateSplitExpense = () => {
     if (totalAmount && numberOfFriends) {
-      const amountPerFriend = totalAmount / numberOfFriends;
-      setResult(amountPerFriend.toFixed(2));
+      const amountPerFriend = (totalAmount / numberOfFriends).toFixed(2);
+      setResult(amountPerFriend);
     } else {
       setResult(null);
     }
   };
+
+  useEffect(() => {
+    calculateSplitExpense();
+  }, [numberOfFriends]);
 
   const handleSplitExpenses = () => {
     const totalExpense = expenses.reduce(
@@ -62,6 +71,13 @@ const SplitExpenseCalculator = () => {
     );
     return total.toFixed(2);
   };
+
+  const currencyOptions = [
+    { label: 'USD', symbol: '$' },
+    { label: 'INR', symbol: '₹' },
+    { label: 'THB', symbol: '฿' },
+    { label: 'SGD', symbol: 'SGD' },
+  ];
 
   return (
     <motion.div
@@ -94,8 +110,20 @@ const SplitExpenseCalculator = () => {
           onChange={handleNumberOfFriendsChange}
         />
       </div>
-      <button onClick={calculateSplitExpense}>Calculate</button>
-      {result && <p>Amount per friend: ${result}</p>}
+      {result && (
+        <p>
+          Amount per friend:{' '}
+          {selectedCurrency === 'USD' ? (
+            `$${result}`
+          ) : (
+            <span>
+              {currencyOptions.find((option) => option.label === selectedCurrency)
+                .symbol}
+              {result}
+            </span>
+          )}
+        </p>
+      )}
 
       <div className="expense-list">
         {expenses.map((expense, index) => (
@@ -134,6 +162,20 @@ const SplitExpenseCalculator = () => {
           <p>Total Expense: ${calculateTotalExpense()}</p>
         </div>
       )}
+
+      <div className="currency-select">
+        <label>Select Currency:</label>
+        <select
+          value={selectedCurrency}
+          onChange={(e) => setSelectedCurrency(e.target.value)}
+        >
+          {currencyOptions.map((option) => (
+            <option key={option.label} value={option.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
     </motion.div>
   );
 };
