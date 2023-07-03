@@ -46,6 +46,7 @@ const Calculator = () => {
 
       <div className="keypad">
         <div className="keypad-row">
+          //for keypad that are in rows
           <button onClick={() => handleButtonClick('7')}>7</button>
           <button onClick={() => handleButtonClick('8')}>8</button>
           <button onClick={() => handleButtonClick('9')}>9</button>
