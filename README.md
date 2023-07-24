@@ -9,6 +9,12 @@ Features to be added
 4. Payment mode options
 
 
+Still in making.
 
+Future updated includes 
+1. Currency conversion
+2. Pictures to be added for reference
+3. Be able to share it on SM.
+   
  
 Techstack - React Js, Vite 
